@@ -10,30 +10,47 @@
         edit
     </button>
 
-  </div>
+  </div><!-- ng-controller="TextBtnCtrl" class="h2" -->
+
+  <!--  -->
+  <div>
+    for <input type="number" ng-model="quantity" class="form-horizontal"> PCR reactions
+  </div><!--  -->
 
   <!-- components list -->
-  <div ui-sortable ng-model="components">
-    <p class="input-group" ng-repeat="comp in components" style="padding:5px 10px; cursor: move;">
+    <table ng-table="componentsTable" class="table table-responsive table-striped">
+      <tbody ui:sortable ng-model="components">
+        <tr class="input-group" ng-repeat="component in components">
 
-      <input type="text" ng-model="comp" class="form-control">
+          <td>
+            <button class="btn btn-danger" ng-click="removeComp($index)" aria-label="Remove">X</button>
+          </td>
+          <td>
+            <input type="text" ng-model="component.comp" class="form-horizontal">
+          </td>
+          <td>
+            <input type="number" ng-model="component.ml" class="form-horizontal">&micro;l
+          </td>
+          <td>
+            {{ total(component) }}
+          </td>
 
-      <span class="input-group-btn">
-        <button class="btn btn-danger" ng-click="removeComp($index)" aria-label="Remove">X</button>
-      </span>
-    </p><!-- class="input-group" ng-repeat="comp in components" style="padding:5px 10px; cursor: move;" -->
-  </div><!-- i-sortable ng-model="components" -->
+        </tr><!-- class="input-group" ng-repeat="comp in components" style="padding:5px 10px; cursor: move;" -->
+      </tbody><!-- ui:sortable ng-model="components" -->
+    </table>
 
-  <!-- Adding field -->
-  <form role="form" ng-submit="addComp()">
-    <div class="row">
-      <div class="input-group">
-        <input type="text" ng-model="comp" placeholder="Add a component" class="form-control">
-        <span class="input-group-btn">
-          <input type="submit" class="btn btn-primary" value="Add">
-        </span>
-      </div><!-- class="input-group" -->
-    </div><!-- div row -->
-  </form>
+    <!-- Adding field -->
+    <form role="form" ng-submit="addComp()">
+      <div class="row">
+
+          <span class="input-group-btn">
+            <input type="submit" class="btn btn-primary" value="Add">
+          </span>
+
+      </div><!-- div row -->
+    </form>
+
+    <h3>Volume per one sample: {{components|sumByKey:'ml'}}</h3>
+    <h3>Total samples volume: {{components|sumByKey:'result'}}</h3>
 
 </div>
