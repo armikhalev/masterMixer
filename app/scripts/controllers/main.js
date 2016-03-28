@@ -8,7 +8,7 @@
  * Controller of the masterMixApp
  */
 angular.module('masterMixApp')
-  .controller('MainCtrl', function ($scope, multiply) {
+  .controller('MainCtrl', ['$scope', '$http', 'multiply', function ($scope, $http, multiply) {
     // given components
     $scope.components = [
       {'comp':'Buffer', 'ml':0, 'result':0},
@@ -18,6 +18,7 @@ angular.module('masterMixApp')
       {'comp':'Enzyme', 'ml':0, 'result':0},
       {'comp':'Water', 'ml':0, 'result':0}
     ];
+
     // creates a new component
     $scope.addComp = function () {
       $scope.components.push({'comp':'', 'ml':0, 'result': 0});
@@ -28,19 +29,45 @@ angular.module('masterMixApp')
     };
 
     $scope.quantity = 0;
+    $scope.placeholderNg = 0;
+
     // returns result of multiplication of volume and quantity
     $scope.total = function(component) {
-
       multiply.setNums(component.ml, $scope.quantity);
       component.result = multiply.multiplyMethod();
 
       return component.result;
     };
 
-  })
-  // controls header text
-  .controller('TextBtnCtrl', function($scope) {
     $scope.headerTxt = {
       txt: 'My PCR MasterMIX'
+  };
+
+  // CRUD operations
+  // Sends request to components.php files
+  $http.get('databaseFiles/components.php').success(function(data){
+    // Stores the returned data to scope
+    $scope.compData = data;
+  });
+
+}])
+
+// thanks to http://plnkr.co/edit/V7mHgpn0JpsM2DahFBco?p=preview
+.directive('placeholderDir', function() {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function(scope, element, attr, ngModel) {
+      var initalHide = true;
+      //format text going to user (model to view)
+      ngModel.$formatters.push(function(value) {
+        console.log(attr.min > value)
+        if (initalHide){
+          initalHide = false;
+          return undefined;
+        }
+        return value;
+      });
+    }
   };
 });

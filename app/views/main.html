@@ -1,6 +1,6 @@
 <div class="container">
 
-  <div ng-controller="TextBtnCtrl" class="h2">
+  <div class="h2">
 
     <span editable-text="headerTxt.txt" e-form="textBtnForm">
       {{ headerTxt.txt || "empty" }}
@@ -12,45 +12,58 @@
 
   </div><!-- ng-controller="TextBtnCtrl" class="h2" -->
 
-  <!--  -->
-  <div>
-    for <input type="number" ng-model="quantity" class="form-horizontal"> PCR reactions
-  </div><!--  -->
+  <p>For <input type="number" placeholder-dir ng-attr-placeholder="{{price.$pristine ? '0':'0'}}"
+    ng-model="quantity"> PCR reactions</p>
 
   <!-- components list -->
-    <table ng-table="componentsTable" class="table table-responsive table-striped">
-      <tbody ui:sortable ng-model="components">
-        <tr class="input-group" ng-repeat="component in components">
 
-          <td>
-            <button class="btn btn-danger" ng-click="removeComp($index)" aria-label="Remove">X</button>
-          </td>
-          <td>
-            <input type="text" ng-model="component.comp" class="form-horizontal">
-          </td>
-          <td>
-            <input type="number" ng-model="component.ml" class="form-horizontal">&micro;l
-          </td>
-          <td>
-            {{ total(component) }}
-          </td>
+  <table class="table table-responsive" ng-table="componentsTable">
+    <thead>
+      <tr>
 
-        </tr><!-- class="input-group" ng-repeat="comp in components" style="padding:5px 10px; cursor: move;" -->
-      </tbody><!-- ui:sortable ng-model="components" -->
-    </table>
+        <th>&#10007</th>
+        <th>Component</th>
+        <th>Volume</th>
+        <th>Result</th>
+        <th>&#10004</th>
+
+      </tr>
+    </thead>
+    <tbody ui:sortable ng-model="components">
+      <tr ng-repeat="component in components">
+
+        <td>
+          <button class="btn btn-xs btn-warning" ng-click="removeComp($index)" aria-label="Remove">X</button>
+        </td>
+        <td>
+          <input type="text" ng-model="component.comp" class="col-xs-12">
+        </td>
+        <td>
+          <input type="number" placeholder-dir ng-attr-placeholder="{{price.$pristine ? '0':'0'}}"
+           ng-model="component.ml" class="col-xs-10">&micro;l
+        </td>
+        <td>
+          <p class="text-center">{{ total(component) }} &micro;l</p>
+        </td>
+        <td>
+          <input type="checkbox">
+        </td>
+
+      </tr><!-- class="input-group" ng-repeat="comp in components" style="padding:5px 10px; cursor: move;" -->
+    </tbody><!-- ui:sortable ng-model="components" -->
+  </table>
 
     <!-- Adding field -->
     <form role="form" ng-submit="addComp()">
       <div class="row">
 
           <span class="input-group-btn">
-            <input type="submit" class="btn btn-primary" value="Add">
+            <input type="submit" class="btn btn-primary" value="Add reagent">
           </span>
 
       </div><!-- div row -->
     </form>
 
-    <h3>Volume per one sample: {{components|sumByKey:'ml'}}</h3>
-    <h3>Total samples volume: {{components|sumByKey:'result'}}</h3>
-
+    <h3>Volume per 1 sample: {{components|sumByKey:'ml'}}</h3>
+    <h3>Total mastermix volume: {{components|sumByKey:'result'}}</h3>
 </div>

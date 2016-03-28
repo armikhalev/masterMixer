@@ -17,8 +17,10 @@ angular.module('masterMixApp')
 
     // Public API here
     multiplyService.setNums = function(first, second) {
-      _first = first;
-      _second = second;
+
+        _first = first;
+        _second = second;
+
     };
 
     multiplyService.getFirst = function() {
